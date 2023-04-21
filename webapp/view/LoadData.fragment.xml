@@ -1,0 +1,12 @@
+<core:FragmentDefintion
+    id="loadDataFragment"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+
+    <BusyDialog
+      id="loadDataDialog"
+      title="Loading Data"
+      titleAlignment="Center"
+      text="Wait please. Data is being retrieved from the server." />
+
+</core:FragmentDefintion>

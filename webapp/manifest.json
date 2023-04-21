@@ -1,0 +1,168 @@
+{
+    "_version": "1.49.0",
+    "sap.app": {
+        "id": "hexagon.ticketapptestmatibtp",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:basic",
+            "version": "1.9.3",
+            "toolsId": "1a78fcbd-c08a-44e3-87e6-69d9f60b3c48"
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "/ticketDB/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "4.0"
+                }
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "hexagon-ticketapptestmatibtp-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "ticketapptestmatibtp",
+                    "action": "display",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "icon": ""
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "config": {
+            "fullWidth": true
+        },
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.112.1",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "hexagon.ticketapptestmatibtp.i18n.i18n"
+                }
+            },
+            "tickets": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "groupId": "$direct",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            },
+            "configs": {
+                "type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"preload": false
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "hexagon.ticketapptestmatibtp.view",
+                "controlId": "flexibleColumnLayout",
+                "clearControlAggregation": true
+            },
+            "routes": [
+                {
+                    "name" : "ticketList",
+                    "pattern" : "",
+                    "target" : "ticketList"
+                },
+                {
+                    "name": "ticketDetail",
+                    "pattern": "ticket/{path}",
+                    "target": [
+                        "ticketList",
+                        "ticketDetail"
+                    ]
+                }
+            ],
+            "targets": {
+                "ticketList" : {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": true,
+                    "viewId": "workListView",
+                    "viewName": "WorkList",
+                    "controlAggregation": "beginColumnPages"
+                },
+                "ticketDetail" : {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": true,
+                    "viewId": "ticketDetailView",
+                    "viewName": "TicketDetail",
+                    "controlAggregation": "midColumnPages"
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "hexagon.ticketapptestmatibtp.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "appView"
+        }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "hexagonticketapptestmatibtp"
+    }
+}

@@ -1,0 +1,129 @@
+<mvc:XMLView
+    controllerName="hexagon.ticketapptestmatibtp.controller.WorkList"
+    id="workListView"
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns="sap.m"
+>
+
+    <Page id="workListPage" title="Ticket Records" titleLevel="H1">
+
+        <headerContent>
+			<OverflowToolbar>
+				<content>
+                    <Button text="Add Ticket" type="Emphasized" press=".onCreateTicket" />
+				</content>
+			</OverflowToolbar>
+		</headerContent>
+
+        <content>
+            <!-- headerMode="Standard" -->
+            <IconTabBar 
+                id="stateTabBar"
+                class="sapUiNoContentPadding" 
+                headerMode="Inline" 
+                tabDensityMode="Compact"
+                select=".onSelectTab">
+                <items>
+                    <IconTabFilter 
+                        id="allTab_Filter"
+                        key="all" text="All" 
+                        count="{tickets>/ticket/$count}"
+                        iconColor="Marker">
+                    </IconTabFilter>
+                    <IconTabSeparator/>
+                    <IconTabFilter 
+                        id="approvedTab_Filter"
+                        key="approved" text="Approved" 
+                        icon="sap-icon://status-completed" 
+                        count="{
+                            path: 'tickets>/ticket_detalle/$count',
+                            parameters: {
+                                $filter: 'ticketstatus_ID eq 2'
+                            }
+                        }" 
+                        iconColor="Positive">
+                    </IconTabFilter>
+                    <IconTabFilter
+                        id="pendingTab_Filter"
+                        key="inCourse" text="In course" 
+                        icon="sap-icon://pending" 
+                        count="{
+                            path: 'tickets>/ticket_detalle/$count',
+                            parameters: {
+                                $filter: 'ticketstatus_ID eq 1 or ticketstatus_ID eq 8 or ticketstatus_ID eq 7'
+                            }
+                        }" 
+                        iconColor="Critical">
+                    </IconTabFilter>
+                    <IconTabFilter 
+                        id="negativeTab_Filter"
+                        key="negative" text="Negative" 
+                        icon="sap-icon://status-negative" 
+                        count="{
+                            path: 'tickets>/ticket_detalle/$count',
+                            parameters: {
+                                $filter: 'ticketstatus_ID eq 3 or ticketstatus_ID eq 5 or ticketstatus_ID eq 6'
+                            }
+                        }" 
+                        iconColor="Negative">
+                    </IconTabFilter>
+                </items>
+
+                <content>
+                    <List id="ticketsTable">
+                        <headerToolbar>
+                            <OverflowToolbar>
+                                <content>
+                                    <ToolbarSpacer />
+                                    <Input 
+                                        visible="{configs>/ticketList/showFilters}"
+                                        value="{configs>/ticketList/queryId}" placeholder="Search by ID" 
+                                        valueLiveUpdate="true" width="200px" />
+                                    <Input 
+                                        visible="{configs>/ticketList/showFilters}"
+                                        value="{configs>/ticketList/queryCuit}" placeholder="Search by CUIT" 
+                                        valueLiveUpdate="true" width="200px" />
+                                    <Button 
+                                        visible="{configs>/ticketList/showFilters}"
+                                        press=".onFilterSearch" 
+                                        text="Go" type="Emphasized"/>
+                                    <Button 
+                                        visible="{configs>/ticketList/showFilters}"
+                                        press=".resetFields" 
+                                        text="Reset" type="Ghost"/>
+                                    <ToolbarSeparator visible="{configs>/ticketList/showFilters}" />
+                                    <Button 
+                                        icon="sap-icon://sort"
+                                        visible="{configs>/ticketList/showFilters}"
+                                        text="Sort by date" type="Ghost" />
+                                    <ToolbarSeparator visible="{configs>/ticketList/showFilters}" />
+                                    <Button 
+                                        press=".toggleFilters"
+                                        visible="{configs>/ticketList/showFilters}"
+                                        text="Hide Filter"
+                                        icon="sap-icon://navigation-up-arrow" />
+                                    <Button 
+                                        press=".toggleFilters"
+                                        visible="{= !${configs>/ticketList/showFilters}}"
+                                        text="Show Filter"
+                                        icon="sap-icon://navigation-down-arrow" />
+                                </content>
+                            </OverflowToolbar>
+                        </headerToolbar>
+
+                        <dependents>
+                            <StandardListItem 
+                                icon="sap-icon://receipt"
+                                id="ticketTemplate" type="Navigation" press=".onSeeDetail" 
+                                title="ID: {tickets>ID}" description="CUIT: {tickets>cuit}" 
+                                info="{tickets>ticketDetalle/fecha}" infoStateInverted="false"/>
+                        </dependents>
+
+                    </List>
+                </content>
+            </IconTabBar>
+        </content>
+    </Page>
+
+
+</mvc:XMLView>

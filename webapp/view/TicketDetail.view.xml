@@ -1,0 +1,168 @@
+<mvc:XMLView
+    controllerName="hexagon.ticketapptestmatibtp.controller.TicketDetail"
+    id="ticketDetailView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:lf="sap.ui.layout.form"
+    xmlns="sap.f">
+    
+    <DynamicPage
+        id="detailPage"
+        showFooter="false"
+        toggleHeaderOnTitleClick="false"
+        headerPinned="true">
+    
+        <title>
+            <DynamicPageTitle>
+                <heading>
+                    <m:Title text="{tickets>ticketDetalle/titulo}" />
+                </heading>
+                <content>
+                    <m:OverflowToolbar>
+                        <m:GenericTag 
+                            text="{tickets>ticketDetalle/ticketstatus/estado}" 
+                            status="{
+                                path: 'tickets>ticketDetalle/ticketstatus/estado',
+                                formatter: '.formatter.estado'
+                            }" />
+				    </m:OverflowToolbar>
+                </content>
+                <actions>
+                    <m:Button 
+                        text="Edit" type="Emphasized" 
+                        visible="{= !${configs>/ticketDetail/editMode}}" 
+                        press=".onEdit"/>
+                    <m:Button 
+                        text="Delete" type="Ghost" 
+                        visible="{= !${configs>/ticketDetail/editMode}}"
+                        press=".onDelete" />
+                    <!-- <m:Button 
+                        text="Back to view" type="Back" 
+                        visible="{configs>/ticketDetail/editMode}" 
+                        press=".onDisplay"/> -->
+                </actions>
+                <navigationActions>
+                    <!-- Comprobar Tamaño de pantalla para mostrar y cambiar Enabled -->
+                    <m:Button
+						icon="sap-icon://full-screen"
+                        visible="{device>/system/desktop}"
+						type="Transparent"
+                        enabled="true"
+                        press=".onFullScreen"/>
+					<m:Button
+						icon="sap-icon://exit-full-screen"
+                        visible="{device>/system/desktop}"
+						type="Transparent"
+                        enabled="true"
+                        press=".onExitFullScreen" />
+					<m:Button
+						icon="sap-icon://decline"
+						type="Transparent"
+                        enabled="true"
+                        press=".onBackList" />
+                </navigationActions>
+            </DynamicPageTitle>
+        </title>
+
+        <header>
+            <DynamicPageHeader pinnable="false">
+                <m:HBox>
+                    <m:VBox>
+                        <m:ObjectIdentifier 
+                            title="Ticket ID" 
+                            text="{tickets>ID}"
+                            class="sapUiSmallMarginBottom"/>
+                        <m:ObjectIdentifier 
+                            title="Detalle ID" 
+                            text="{tickets>ticketDetalle_ID}"/>
+                    </m:VBox>
+                    <m:VBox class="sapUiMediumMarginBegin">
+                        <m:ObjectIdentifier 
+                            title="Fecha creacion" 
+                            emptyIndicatorMode="On"
+                            text="{tickets>ticketDetalle/fechaCreacion}"
+                            class="sapUiSmallMarginBottom"/>
+                        <m:ObjectIdentifier 
+                            title="Fecha modificacion" 
+                            emptyIndicatorMode="On"
+                            text="{tickets>ticketDetalle/fechaMod}"/>
+                    </m:VBox>
+                </m:HBox>
+            </DynamicPageHeader>
+        </header>
+
+        <content>
+
+            <lf:SimpleForm
+                layout="ColumnLayout"
+                labelSpanXL="-1"
+                labelSpanL="3"
+                labelSpanM="4"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="0"
+                emptySpanL="4"
+                emptySpanM="0"
+                emptySpanS="0"
+                columnsXL="-1"
+                columnsL="3"
+                columnsM="2">
+
+                <lf:title>
+                    <core:Title text="Details" />
+                </lf:title>
+
+                <lf:content>
+                    <m:Label vAlign="Middle" text="Nombre" />
+					<m:Input 
+                        editable="{configs>/ticketDetail/editMode}" 
+                        value="{tickets>ticketDetalle/nombre}" 
+                        class="sapUiSmallMarginBegin" />
+                    <m:Label vAlign="Middle" text="Titulo" />
+					<m:Input 
+                        editable="{configs>/ticketDetail/editMode}" 
+                        value="{tickets>ticketDetalle/titulo}" 
+                        class="sapUiSmallMarginBegin" />
+                    <m:Label vAlign="Middle" text="Usuario modificador" />
+					<m:Input 
+                        editable="{configs>/ticketDetail/editMode}" 
+                        value="{tickets>usuarioCreador}" 
+                        class="sapUiSmallMarginBegin" />
+                    <m:Label vAlign="Middle" text="Total" />
+					<m:Input 
+                        editable="{configs>/ticketDetail/editMode}" 
+                        value="{tickets>ticketDetalle/total}" 
+                        class="sapUiSmallMarginBegin" />
+                    <m:Label vAlign="Middle" text="Estado" />
+                    <m:ComboBox 
+                        items="{path: 'tickets>/ticket_estado'}"
+                        selectedKey="{tickets>ticketDetalle/ticketstatus_ID}"
+                        editable="{configs>/ticketDetail/editMode}" >
+                        <m:items>
+                            <core:Item key="{tickets>ID}" text="{tickets>estado}" />
+                        </m:items>
+                    </m:ComboBox>
+
+                    <m:Label vAlign="Middle" text="Descripcion" />
+					<m:Input 
+                        editable="{configs>/ticketDetail/editMode}" 
+                        value="{tickets>ticketDetalle/description}" 
+                        class="sapUiSmallMarginBegin" />
+                </lf:content>
+
+            </lf:SimpleForm>
+
+        </content>
+
+        <footer>
+            <m:OverflowToolbar>
+				<m:ToolbarSpacer/>
+				<m:Button type="Accept" text="Save" press=".onSaveChanges"/>
+				<m:Button type="Reject" text="Cancel" press=".onCancelChanges"/>
+			</m:OverflowToolbar>
+        </footer>
+
+    </DynamicPage>
+
+</mvc:XMLView>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="CargaComprobantes" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="ticket" EntityType="CargaComprobantes.ticket">
+                    <NavigationPropertyBinding Path="ticketDetalle" Target="ticket_detalle"/>
+                </EntitySet>
+                <EntitySet Name="ticket_detalle" EntityType="CargaComprobantes.ticket_detalle">
+                    <NavigationPropertyBinding Path="ticketstatus" Target="ticket_estado"/>
+                </EntitySet>
+                <EntitySet Name="ticket_estado" EntityType="CargaComprobantes.ticket_estado"/>
+            </EntityContainer>
+            <EntityType Name="ticket">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="cuit" Type="Edm.String" MaxLength="11"/>
+                <Property Name="archivo" Type="Edm.String"/>
+                <NavigationProperty Name="ticketDetalle" Type="CargaComprobantes.ticket_detalle">
+                    <OnDelete Action="Cascade"/>
+                    <ReferentialConstraint Property="ticketDetalle_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="ticketDetalle_ID" Type="Edm.Guid"/>
+                <Property Name="usuarioCreador" Type="Edm.String" MaxLength="250"/>
+            </EntityType>
+            <EntityType Name="ticket_detalle">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="nombre" Type="Edm.String" MaxLength="250"/>
+                <Property Name="total" Type="Edm.Double"/>
+                <Property Name="fecha" Type="Edm.Date"/>
+                <Property Name="titulo" Type="Edm.String" MaxLength="250"/>
+                <Property Name="description" Type="Edm.String" MaxLength="500"/>
+                <NavigationProperty Name="ticketstatus" Type="CargaComprobantes.ticket_estado">
+                    <ReferentialConstraint Property="ticketstatus_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="ticketstatus_ID" Type="Edm.Int16" DefaultValue="1"/>
+                <Property Name="usuarioMod" Type="Edm.String" MaxLength="250"/>
+                <Property Name="fechaCreacion" Type="Edm.DateTimeOffset"/>
+                <Property Name="fechaMod" Type="Edm.DateTimeOffset"/>
+            </EntityType>
+            <EntityType Name="ticket_estado">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int16" Nullable="false" DefaultValue="1"/>
+                <Property Name="estado" Type="Edm.String" MaxLength="100"/>
+            </EntityType>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

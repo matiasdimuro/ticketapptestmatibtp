@@ -1,0 +1,19 @@
+<mvc:View 
+    id="appView"
+    controllerName="hexagon.ticketapptestmatibtp.controller.App"
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns:m="sap.m"
+    xmlns="sap.f"
+    displayBlock="true">
+    
+    <m:App id="App">
+
+        <FlexibleColumnLayout
+            id="flexibleColumnLayout" 
+            backgroundDesign="Solid"
+            layout="{configs>/app/layout}">
+        </FlexibleColumnLayout>
+        
+    </m:App>
+
+</mvc:View>
