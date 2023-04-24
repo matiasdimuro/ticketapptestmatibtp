@@ -22,19 +22,84 @@ sap.ui.define([
         _onRouteMatched : function(oEvent) {
 
             var sTicketPath = oEvent.getParameter("arguments").path;
+            var batchGroupId  = "ticketDetalle";
+
+            this.getView().setBusy(true);
             
-            this.getView().bindElement({
-                path: `/ticket(${decodeURIComponent(sTicketPath)})`,
-                model: "tickets",
-                parameters: {
-                    expand: "{ticketDetalle},{ticketstatus}",
-                    $$updateGroupId: "ticketDetalle"
+            if (window.decodeURIComponent(sTicketPath).substr(1) === "") {
+
+                // Si ya tengo un listBinding, por qué crear otro?
+                // Se sobreescribe el primero? Se crea y luego se borra?
+                // Crea un contexto o le asigna un contexto al modelo?
+                
+                var sModelName = "tickets";
+                var oTicketsModel = this.oComponent.getModel(sModelName);
+                var oListBindingContext  = oTicketsModel.bindList("/ticket", undefined, undefined, undefined, {
+                        $expand: "ticketDetalle($expand=ticketstatus)",
+                        $$updateGroupId: batchGroupId
+                });
+
+                var sDateToday = new Date().toISOString().substring(0,10);
+                var sDateCreation = new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString();
+                
+                var oTicketEntity = {
+                    cuit: "",
+                    archivo: "",
+                    usuarioCreador: "",
+                    ticketDetalle: {
+                        nombre: "Sin nombre",
+                        total: 0.0,
+                        fecha: sDateToday,
+                        titulo: "Sin Titulo",
+                        description: "",
+                        usuarioMod: "",
+                        fechaCreacion: sDateCreation,
+                        fechaMod: null,
+                        ticketstatus: {
+                            ID: 14,
+                            estado: "Created" 
+                        }
+                    }
                 }
-            });
+
+                var oNewTicketContext = oListBindingContext.create(oTicketEntity);
+
+                this.getView().unbindObject(sModelName);
+                this.getView().setBindingContext(oNewTicketContext, sModelName);
+            
+                oTicketsModel.submitBatch(batchGroupId)
+    
+                    .then((oRes) => {
+                        this.onEdit();
+                        this.getView().setBusy(false)
+                        this.oComponent.getModel(sModelName).refresh();
+                    })
+
+                    .catch((oErr) => {
+                        console.error(oErr);
+                    });
+            }
+
+            
+            else {
+                this.getView().bindElement({
+                    path: `/ticket(${decodeURIComponent(sTicketPath)})`,
+                    model: "tickets",
+                    parameters: {
+                        expand: "{ticketDetalle},{ticketstatus}",
+                        $$updateGroupId: batchGroupId
+                    },
+                    events: {
+                        dataReceived: function() {
+                            this.getView().setBusy(false);
+                        }.bind(this)
+                    }
+                });
+            }
 
             var oDetailPage = this.getView().byId("detailPage");
             oDetailPage.setShowFooter(false);
-
+            
             this.oComponent.getModel("configs").setProperty("/ticketDetail/editMode", false);
         },
 
@@ -51,7 +116,6 @@ sap.ui.define([
             var oDetailPage = this.getView().byId("detailPage");
             oDetailPage.setShowFooter(false);
         },
-
 
 
         onSaveChanges : function() {
@@ -76,12 +140,10 @@ sap.ui.define([
                 oTicketsModel.submitBatch("ticketDetalle")
 
                     .then((result) => {
-
-                        this.onDisplay();
-                        this.getView().setBusy(false);
-                        
-                        oBindingContext.refresh();
                         this.oComponent.getModel("tickets").refresh();
+                        this.getView().setBusy(false);
+                        oBindingContext.refresh();
+                        this._onExitToolbar();
                     })
 
                     .catch((err) => {});
@@ -91,6 +153,23 @@ sap.ui.define([
 
         onCancelChanges : function() {
             this.oComponent.getModel("tickets").resetChanges("ticketDetalle");
+            this._onExitToolbar();
+        },
+
+        _onExitToolbar : function() {
+
+            var oTicketContext = this.getView().getBindingContext("tickets");
+
+            var sHash = this.oRouter.getHashChanger().getHash();
+            var aSplitedHash = sHash.split("/");
+            var sCod = aSplitedHash[1];
+            
+            if (window.decodeURIComponent(sCod) === "/") {
+                this.oRouter.navTo("ticketDetail", {
+                    path: window.encodeURIComponent(oTicketContext.getObject().ID)
+                });
+            }
+            
             this.onDisplay();
         },
 

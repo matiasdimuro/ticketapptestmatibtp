@@ -116,13 +116,19 @@
                 <lf:content>
                     <m:Label vAlign="Middle" text="Nombre" />
 					<m:Input 
-                        editable="{configs>/ticketDetail/editMode}" 
+                        editable="{configs>/ticketDetail/editMode}"
                         value="{tickets>ticketDetalle/nombre}" 
                         class="sapUiSmallMarginBegin" />
                     <m:Label vAlign="Middle" text="Titulo" />
 					<m:Input 
                         editable="{configs>/ticketDetail/editMode}" 
                         value="{tickets>ticketDetalle/titulo}" 
+                        class="sapUiSmallMarginBegin" />
+                    <m:Label vAlign="Middle" text="Usuario modificador" />
+                    <m:Label vAlign="Middle" text="CUIT" />
+					<m:Input 
+                        editable="{configs>/ticketDetail/editMode}" 
+                        value="{tickets>cuit}" 
                         class="sapUiSmallMarginBegin" />
                     <m:Label vAlign="Middle" text="Usuario modificador" />
 					<m:Input 
@@ -134,6 +140,11 @@
                         editable="{configs>/ticketDetail/editMode}" 
                         value="{tickets>ticketDetalle/total}" 
                         class="sapUiSmallMarginBegin" />
+                    <m:Label vAlign="Middle" text="Descripcion" />
+					<m:Input 
+                        editable="{configs>/ticketDetail/editMode}" 
+                        value="{tickets>ticketDetalle/description}" 
+                        class="sapUiSmallMarginBegin" />
                     <m:Label vAlign="Middle" text="Estado" />
                     <m:ComboBox 
                         items="{path: 'tickets>/ticket_estado'}"
@@ -143,12 +154,6 @@
                             <core:Item key="{tickets>ID}" text="{tickets>estado}" />
                         </m:items>
                     </m:ComboBox>
-
-                    <m:Label vAlign="Middle" text="Descripcion" />
-					<m:Input 
-                        editable="{configs>/ticketDetail/editMode}" 
-                        value="{tickets>ticketDetalle/description}" 
-                        class="sapUiSmallMarginBegin" />
                 </lf:content>
 
             </lf:SimpleForm>

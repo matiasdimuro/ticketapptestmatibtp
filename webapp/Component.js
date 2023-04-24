@@ -29,8 +29,10 @@ sap.ui.define([
                     },
                     ticketList: {
                         showFilters: true,
-                        queryCuit : "",
-                        queryId : ""
+                        queryTitulo : "",
+                        queryId : "",
+                        orderDesc: true,
+                        queryEstado: "all"
                     },
                     ticketDetail: {
                         editMode: false

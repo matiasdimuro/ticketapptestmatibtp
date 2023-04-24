@@ -81,7 +81,7 @@
                                         valueLiveUpdate="true" width="200px" />
                                     <Input 
                                         visible="{configs>/ticketList/showFilters}"
-                                        value="{configs>/ticketList/queryCuit}" placeholder="Search by CUIT" 
+                                        value="{configs>/ticketList/queryTitulo}" placeholder="Search by titulo" 
                                         valueLiveUpdate="true" width="200px" />
                                     <Button 
                                         visible="{configs>/ticketList/showFilters}"
@@ -95,6 +95,7 @@
                                     <Button 
                                         icon="sap-icon://sort"
                                         visible="{configs>/ticketList/showFilters}"
+                                        press=".onSortByDate"
                                         text="Sort by date" type="Ghost" />
                                     <ToolbarSeparator visible="{configs>/ticketList/showFilters}" />
                                     <Button 
@@ -115,7 +116,7 @@
                             <StandardListItem 
                                 icon="sap-icon://receipt"
                                 id="ticketTemplate" type="Navigation" press=".onSeeDetail" 
-                                title="ID: {tickets>ID}" description="CUIT: {tickets>cuit}" 
+                                title="{tickets>ticketDetalle/titulo}" description="ID: {tickets>ID}" 
                                 info="{tickets>ticketDetalle/fecha}" infoStateInverted="false"/>
                         </dependents>
 
