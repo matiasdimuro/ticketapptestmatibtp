@@ -32,12 +32,14 @@ sap.ui.define([
                 // Se sobreescribe el primero? Se crea y luego se borra?
                 // Crea un contexto o le asigna un contexto al modelo?
                 
+                
                 var sModelName = "tickets";
                 var oTicketsModel = this.oComponent.getModel(sModelName);
                 var oListBindingContext  = oTicketsModel.bindList("/ticket", undefined, undefined, undefined, {
-                        $expand: "ticketDetalle($expand=ticketstatus)",
-                        $$updateGroupId: batchGroupId
+                    $expand: "ticketDetalle($expand=ticketstatus)",
+                    $$updateGroupId: batchGroupId
                 });
+                
 
                 var sDateToday = new Date().toISOString().substring(0,10);
                 var sDateCreation = new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString();
@@ -56,17 +58,17 @@ sap.ui.define([
                         fechaCreacion: sDateCreation,
                         fechaMod: null,
                         ticketstatus: {
-                            ID: 14,
-                            estado: "Created" 
+                            ID: 1,
+                            estado: "Pending" 
                         }
                     }
                 }
-
+                
                 var oNewTicketContext = oListBindingContext.create(oTicketEntity);
 
                 this.getView().unbindObject(sModelName);
                 this.getView().setBindingContext(oNewTicketContext, sModelName);
-            
+                /*
                 oTicketsModel.submitBatch(batchGroupId)
     
                     .then((oRes) => {
@@ -78,6 +80,10 @@ sap.ui.define([
                     .catch((oErr) => {
                         console.error(oErr);
                     });
+                */
+
+                // Batch Group Id ¿?
+                this.createTicket(oTicketEntity, batchGroupId);
             }
 
             
@@ -101,6 +107,53 @@ sap.ui.define([
             oDetailPage.setShowFooter(false);
             
             this.oComponent.getModel("configs").setProperty("/ticketDetail/editMode", false);
+        },
+
+        createTicket : async function(oTicketEntity) {
+
+            const URL = "/ticketDB/ticket"
+            const options = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json', 
+                    'Access-Control-Allow-Origin': 'https://ff6b5921trial-dev-tickettrial-srv.cfapps.us10-001.hana.ondemand.com',
+                },
+                body: JSON.stringify(oTicketEntity)
+            }
+
+            // Fetch retorna una "Promise" (sin "async await")
+            // Se ejecuta de forma "asíncrona". Es decir, se sigue con el resto del codigo, mientras el proceso corre en segundo plano.
+            // Una vez se tiene la "response", se ejecutan los meodtodos "resolve" (then(res)) y "reject" (catch(err))
+            /*
+            let promise = fetch(URL, options);
+
+            promise.then((response) => {
+                this.onEdit();
+                this.getView().setBusy(false)
+                this.oComponent.getModel("tickets").refresh();
+                debugger;
+            })
+
+            promise.catch((err) => {
+                console.error(err);
+            });
+            */
+
+            // "Async Await" ejecuta codigo hasta encontrarse con la expresion await.
+            // Luego, el flujo de instrucciones queda en "espera", dado que la funcion asincrona no se ha completado.
+            // Mientras tanto, se continua con la ejecucion del programa.
+            // Una vez se recibe la "respuesta" de la "promesa" (es decir, resultado del resolve() o reject()), se continua con el flujo siguiente a la expresion "await".
+            let response = await fetch(URL, options);
+            if (response.ok) {
+                this.onEdit();
+                this.getView().setBusy(false)
+                this.oComponent.getModel("tickets").refresh();
+                console.log("Response has been received")
+                // console.log("Ticket response: " + response.json());
+            }
+            else {
+                console.error(`Error | Status: ${response.status} | Message: ${response.statusText}`);
+            }
         },
 
 
@@ -198,6 +251,5 @@ sap.ui.define([
         onExitFullScreen : function() {
             this.oComponent.getModel("configs").setProperty("/app/layout", "TwoColumnsMidExpanded")
         }
-
     });
 });
