@@ -16,14 +16,14 @@
         <title>
             <DynamicPageTitle>
                 <heading>
-                    <m:Title text="{tickets>ticketDetalle/titulo}" />
+                    <m:Title text="{ticketDetail>ticketDetalle/titulo}" />
                 </heading>
                 <content>
                     <m:OverflowToolbar>
                         <m:GenericTag 
-                            text="{tickets>ticketDetalle/ticketstatus/estado}" 
+                            text="{ticketDetail>ticketDetalle/ticketstatus/estado}" 
                             status="{
-                                path: 'tickets>ticketDetalle/ticketstatus/estado',
+                                path: 'ticketDetail>ticketDetalle/ticketstatus/estado',
                                 formatter: '.formatter.estado'
                             }" />
 				    </m:OverflowToolbar>
@@ -71,22 +71,22 @@
                     <m:VBox>
                         <m:ObjectIdentifier 
                             title="Ticket ID" 
-                            text="{tickets>ID}"
+                            text="{ticketDetail>ID}"
                             class="sapUiSmallMarginBottom"/>
                         <m:ObjectIdentifier 
                             title="Detalle ID" 
-                            text="{tickets>ticketDetalle_ID}"/>
+                            text="{ticketDetail>ticketDetalle/ID}"/>
                     </m:VBox>
                     <m:VBox class="sapUiMediumMarginBegin">
                         <m:ObjectIdentifier 
                             title="Fecha creacion" 
                             emptyIndicatorMode="On"
-                            text="{tickets>ticketDetalle/fechaCreacion}"
+                            text="{ticketDetail>ticketDetalle/fechaCreacion}"
                             class="sapUiSmallMarginBottom"/>
                         <m:ObjectIdentifier 
                             title="Fecha modificacion" 
                             emptyIndicatorMode="On"
-                            text="{tickets>ticketDetalle/fechaMod}"/>
+                            text="{ticketDetail>ticketDetalle/fechaMod}"/>
                     </m:VBox>
                 </m:HBox>
             </DynamicPageHeader>
@@ -117,38 +117,38 @@
                     <m:Label vAlign="Middle" text="Nombre" />
 					<m:Input 
                         editable="{configs>/ticketDetail/editMode}"
-                        value="{tickets>ticketDetalle/nombre}" 
+                        value="{ticketDetail>/ticketDetalle/nombre}" 
                         class="sapUiSmallMarginBegin" />
                     <m:Label vAlign="Middle" text="Titulo" />
 					<m:Input 
                         editable="{configs>/ticketDetail/editMode}" 
-                        value="{tickets>ticketDetalle/titulo}" 
+                        value="{ticketDetail>/ticketDetalle/titulo}" 
                         class="sapUiSmallMarginBegin" />
-                    <m:Label vAlign="Middle" text="Usuario modificador" />
                     <m:Label vAlign="Middle" text="CUIT" />
 					<m:Input 
+                        maxLength="11"
                         editable="{configs>/ticketDetail/editMode}" 
-                        value="{tickets>cuit}" 
+                        value="{ticketDetail>/cuit}" 
                         class="sapUiSmallMarginBegin" />
-                    <m:Label vAlign="Middle" text="Usuario modificador" />
+                    <m:Label vAlign="Middle" text="Usuario creador" />
 					<m:Input 
                         editable="{configs>/ticketDetail/editMode}" 
-                        value="{tickets>usuarioCreador}" 
+                        value="{ticketDetail>/usuarioCreador}" 
                         class="sapUiSmallMarginBegin" />
                     <m:Label vAlign="Middle" text="Total" />
 					<m:Input 
                         editable="{configs>/ticketDetail/editMode}" 
-                        value="{tickets>ticketDetalle/total}" 
+                        value="{ticketDetail>/ticketDetalle/total}" 
                         class="sapUiSmallMarginBegin" />
                     <m:Label vAlign="Middle" text="Descripcion" />
 					<m:Input 
                         editable="{configs>/ticketDetail/editMode}" 
-                        value="{tickets>ticketDetalle/description}" 
+                        value="{ticketDetail>/ticketDetalle/description}" 
                         class="sapUiSmallMarginBegin" />
                     <m:Label vAlign="Middle" text="Estado" />
                     <m:ComboBox 
                         items="{path: 'tickets>/ticket_estado'}"
-                        selectedKey="{tickets>ticketDetalle/ticketstatus_ID}"
+                        selectedKey="{ticketDetail>/ticketDetalle/ticketstatus_ID}"
                         editable="{configs>/ticketDetail/editMode}" >
                         <m:items>
                             <core:Item key="{tickets>ID}" text="{tickets>estado}" />

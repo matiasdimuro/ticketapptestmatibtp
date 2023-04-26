@@ -98,6 +98,11 @@
                     "earlyRequests": true
                 }
             },
+            "ticketDetail": {
+                "type": "sap.ui.model.json.JSONModel",
+                "settings": {},
+                "preload": false
+            },
             "configs": {
                 "type": "sap.ui.model.json.JSONModel",
 				"settings": {},
